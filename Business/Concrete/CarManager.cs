@@ -3,15 +3,16 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Entities.Concrete.DTOs;
+
 
 namespace Business.Concrete
 {
     public class CarManager : ICarService
     {
-        private IRepository<Car> _dal;
+        ICarDal _dal;
 
-        public CarManager(IRepository<Car> dal)
+        public CarManager(ICarDal dal)
         {
             _dal = dal;
         }
@@ -50,6 +51,11 @@ namespace Business.Concrete
         public Car Get(Func<Car,bool> filter)
         {
             return _dal.Get(filter);
+        }
+
+        public List<CarDTO> GetCarDetails()
+        {
+            return _dal.GetCarDetails();
         }
 
         public List<Car> GetCarsByBrandId(int id)

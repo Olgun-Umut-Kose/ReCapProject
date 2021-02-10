@@ -8,9 +8,9 @@ namespace Business.Concrete
 {
     public class BrandManager : IService<Brand>
     {
-        IRepository<Brand> _dal;
+        IBrandDal _dal;
 
-        public BrandManager(IRepository<Brand> dal)
+        public BrandManager(IBrandDal dal)
         {
             _dal = dal;
         }

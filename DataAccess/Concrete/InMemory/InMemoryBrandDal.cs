@@ -2,16 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Core.DataAccess.InMemory;
+using DataAccess.Abstract;
 
 namespace DataAccess.Concrete.InMemory
 {
-    public class InMemoryBrandDal : InMemoryDalBaseRepo<Brand>
+    public class InMemoryBrandDal : InMemoryBaseRepo<Brand>, IBrandDal
     {
         
         public override void Update(Brand entity)
         {
-            Brand UpdateBrand = Get(e => entity.Id == e.Id);
-            UpdateBrand.BrandName = entity.BrandName;
+            Brand updateBrand = Get(e => entity.Id == e.Id);
+            updateBrand.BrandName = entity.BrandName;
             
         }
     }

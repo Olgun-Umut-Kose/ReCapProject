@@ -1,11 +1,11 @@
-﻿using Entities.Abstract;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Core.Entities;
 
 namespace Entities.Concrete.DTOs
 {
-    public class CarDTO : IDTO
+    public class CarDTO : IDto
     {
         public int Id { get; set; }
         public string BrandName { get; set; }

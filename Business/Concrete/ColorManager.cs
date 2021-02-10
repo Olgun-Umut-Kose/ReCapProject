@@ -8,9 +8,9 @@ namespace Business.Concrete
 {
     public class ColorManager : IService<Color>
     {
-        IRepository<Color> _dal;
+        IColorDal _dal;
 
-        public ColorManager(IRepository<Color> dal)
+        public ColorManager(IColorDal dal)
         {
             _dal = dal;
         }

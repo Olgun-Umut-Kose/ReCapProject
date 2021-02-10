@@ -68,30 +68,18 @@ namespace ConsoleUI
 
             carManager.AddOrEdit(car);
 
-            var CarList = from c in carManager.GetAll()
-                          join b in brandManager.GetAll() on c.BrandId equals b.Id
-                          join clr in colorManager.GetAll() on c.ColorId equals clr.Id
-                          select new CarDTO
-                          {
-                              Id = c.Id,
-                              BrandName = b.BrandName,
-                              ColorName = clr.ColorName,
-                              ColorsHexCode = clr.HexCode,
-                              DailyPrice = c.DailyPrice,
-                              Description = c.Description,
-                              ModelYear = c.ModelYear.Year
-                          };
-
-            foreach (CarDTO carDTO in CarList)
+            
+            foreach (CarDTO carDTO in carManager.GetCarDetails())
             {
                 Console.WriteLine($"Id: {carDTO.Id}, " +
-                    $"Marka Adı: {carDTO.BrandName}, " +
-                    $"Rengi: {carDTO.ColorName}, " +
-                    $"Renk Hex Kodu: {carDTO.ColorsHexCode}, " +
-                    $"Günlük Fiyatı: {carDTO.DailyPrice}, " +
-                    $"Açıklama: {carDTO.Description}, " +
-                    $"Model Yılı: {carDTO.ModelYear}\n");
+                                  $"Marka Adı: {carDTO.BrandName}, " +
+                                  $"Rengi: {carDTO.ColorName}, " +
+                                  $"Renk Hex Kodu: {carDTO.ColorsHexCode}, " +
+                                  $"Günlük Fiyatı: {carDTO.DailyPrice}, " +
+                                  $"Açıklama: {carDTO.Description}, " +
+                                  $"Model Yılı: {carDTO.ModelYear}\n");
             }
+            
 
         }
 
