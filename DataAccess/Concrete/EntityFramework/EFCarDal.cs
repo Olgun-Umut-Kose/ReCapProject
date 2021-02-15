@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Core.DataAccess.EntityFramework;
+using Core.Utilities.Results.Abstract;
+using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete.DTOs;
 
@@ -11,22 +13,26 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EFCarDal : EFEntityRepoBase<Car,ReCapContext>,ICarDal
     {
-        public List<CarDTO> GetCarDetails()
+        public IDataResult<List<CarDTO>> GetCarDetails()
         {
-            var CarList = from c in GetAll()
-                join b in new  EFBrandDal().GetAll() on c.BrandId equals b.Id
-                join clr in new EFColorDal().GetAll() on c.ColorId equals clr.Id
-                select new CarDTO
-                {
-                    Id = c.Id,
-                    BrandName = b.BrandName,
-                    ColorName = clr.ColorName,
-                    ColorsHexCode = clr.HexCode,
-                    DailyPrice = c.DailyPrice,
-                    Description = c.Description,
-                    ModelYear = c.ModelYear.Year
-                };
-            return CarList.ToList();
+            using (ReCapContext context = new ReCapContext())
+            {
+                var CarList = from c in context.Cars
+                    join b in context.Brands on c.BrandId equals b.Id
+                    join clr in context.Colors on c.ColorId equals clr.Id
+                    select new CarDTO
+                    {
+                        Id = c.Id,
+                        BrandName = b.BrandName,
+                        ColorName = clr.ColorName,
+                        ColorsHexCode = clr.HexCode,
+                        DailyPrice = c.DailyPrice,
+                        Description = c.Description,
+                        ModelYear = c.ModelYear.Year
+                    };
+                return new SuccessDataResult<List<CarDTO>>(CarList.ToList());
+            }
+            
         }
     }
 }

@@ -3,10 +3,12 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using Core.Utilities.Results.Abstract;
+using Core.Utilities.Results.Concrete;
 
 namespace Business.Concrete
 {
-    public class BrandManager : IService<Brand>
+    public class BrandManager : IBrandService
     {
         IBrandDal _dal;
 
@@ -15,29 +17,29 @@ namespace Business.Concrete
             _dal = dal;
         }
 
-        public void AddOrEdit(Brand entity)
+        public IResult AddOrEdit(Brand entity)
         {
             if (entity.Id == 0)
             {
-                _dal.Add(entity);
+                return new Result(_dal.Add(entity));
             }
             else
             {
-                _dal.Update(entity);
+                return new Result(_dal.Update(entity));
             }
         }
 
-        public void Delete(Brand entity)
+        public IResult Delete(Brand entity)
         {
-            _dal.Delete(entity);
+            return new Result(_dal.Delete(entity));
         }
 
-        public List<Brand> GetAll(Func<Brand,bool> filter = null)
+        public IDataResult<List<Brand>> GetAll(Func<Brand,bool> filter = null)
         {
             return _dal.GetAll(filter);
         }
 
-        public Brand Get(Func<Brand,bool> filter)
+        public IDataResult<Brand> Get(Func<Brand,bool> filter)
         {
             return _dal.Get(filter);
         }

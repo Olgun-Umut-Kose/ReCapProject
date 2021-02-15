@@ -10,11 +10,11 @@ namespace DataAccess.Concrete.InMemory
     public class InMemoryBrandDal : InMemoryBaseRepo<Brand>, IBrandDal
     {
         
-        public override void Update(Brand entity)
+        public override bool Update(Brand entity)
         {
-            Brand updateBrand = Get(e => entity.Id == e.Id);
+            Brand updateBrand = Get(e => entity.Id == e.Id).Data;
             updateBrand.BrandName = entity.BrandName;
-            
+            return true;
         }
     }
 }

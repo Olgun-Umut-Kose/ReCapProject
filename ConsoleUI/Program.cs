@@ -24,8 +24,8 @@ namespace ConsoleUI
             Car car = new Car
             {
                 Id = 0,
-                BrandId = brandManager.Get(b => b.BrandName == "Marka1").Id,
-                ColorId = colorManager.Get(c => c.ColorName == "Siyah").Id,
+                BrandId = brandManager.Get(b => b.BrandName == "Marka1").Data.Id,
+                ColorId = colorManager.Get(c => c.ColorName == "Siyah").Data.Id,
                 ModelYear = Convert.ToDateTime("03.02.1999"),
                 DailyPrice = 3700,
                 Description = "Araç birin açıklaması"
@@ -33,8 +33,8 @@ namespace ConsoleUI
             carManager.AddOrEdit(car);
 
             car.Id = 0;
-            car.BrandId = brandManager.Get(b => b.BrandName == "Marka2").Id;
-            car.ColorId = colorManager.Get(c => c.ColorName == "Kirmizi").Id;
+            car.BrandId = brandManager.Get(b => b.BrandName == "Marka2").Data.Id;
+            car.ColorId = colorManager.Get(c => c.ColorName == "Kirmizi").Data.Id;
             car.ModelYear = Convert.ToDateTime("03.02.2000");
             car.DailyPrice = 4900;
             car.Description = "Araç ikinin açıklaması";
@@ -42,8 +42,8 @@ namespace ConsoleUI
             carManager.AddOrEdit(car);
 
             car.Id = 0;
-            car.BrandId = brandManager.Get(b => b.BrandName == "Marka3").Id;
-            car.ColorId = colorManager.Get(c => c.ColorName == "Sari").Id;
+            car.BrandId = brandManager.Get(b => b.BrandName == "Marka3").Data.Id;
+            car.ColorId = colorManager.Get(c => c.ColorName == "Sari").Data.Id;
             car.ModelYear = Convert.ToDateTime("03.02.1988");
             car.DailyPrice = 8000;
             car.Description = "Araç üçün açıklaması";
@@ -51,8 +51,8 @@ namespace ConsoleUI
             carManager.AddOrEdit(car);
 
             car.Id = 0;
-            car.BrandId = brandManager.Get(b => b.BrandName == "Marka4").Id;
-            car.ColorId = colorManager.Get(c => c.ColorName == "Beyaz").Id;
+            car.BrandId = brandManager.Get(b => b.BrandName == "Marka4").Data.Id;
+            car.ColorId = colorManager.Get(c => c.ColorName == "Beyaz").Data.Id;
             car.ModelYear = Convert.ToDateTime("03.02.1988");
             car.DailyPrice = 8000;
             car.Description = "";
@@ -60,8 +60,8 @@ namespace ConsoleUI
             carManager.AddOrEdit(car);
 
             car.Id = 0;
-            car.BrandId = brandManager.Get(b => b.BrandName == "Marka5").Id;
-            car.ColorId = colorManager.Get(c => c.ColorName == "Siyah").Id;
+            car.BrandId = brandManager.Get(b => b.BrandName == "Marka5").Data.Id;
+            car.ColorId = colorManager.Get(c => c.ColorName == "Siyah").Data.Id;
             car.ModelYear = Convert.ToDateTime("03.02.1988");
             car.DailyPrice = 0;
             car.Description = "Araç beşin açıklaması";
@@ -69,7 +69,7 @@ namespace ConsoleUI
             carManager.AddOrEdit(car);
 
             
-            foreach (CarDTO carDTO in carManager.GetCarDetails())
+            foreach (CarDTO carDTO in carManager.GetCarDetails().Data)
             {
                 Console.WriteLine($"Id: {carDTO.Id}, " +
                                   $"Marka Adı: {carDTO.BrandName}, " +
@@ -110,8 +110,8 @@ namespace ConsoleUI
             Car car = new Car
             {
                 Id = 0,
-                BrandId = brandManager.Get(b => b.BrandName == "Marka1").Id,
-                ColorId = colorManager.Get(c => c.ColorName == "Siyah").Id,
+                BrandId = brandManager.Get(b => b.BrandName == "Marka1").Data.Id,
+                ColorId = colorManager.Get(c => c.ColorName == "Siyah").Data.Id,
                 ModelYear = Convert.ToDateTime("03.02.1999"),
                 DailyPrice = 3700,
                 Description = "Araç birin açıklaması"
@@ -119,8 +119,8 @@ namespace ConsoleUI
             carManager.AddOrEdit(car);
 
             car.Id = 0;
-            car.BrandId = brandManager.Get(b => b.BrandName == "Marka2").Id;
-            car.ColorId = colorManager.Get(c => c.ColorName == "Kirmizi").Id;
+            car.BrandId = brandManager.Get(b => b.BrandName == "Marka2").Data.Id;
+            car.ColorId = colorManager.Get(c => c.ColorName == "Kirmizi").Data.Id;
             car.ModelYear = Convert.ToDateTime("03.02.2000");
             car.DailyPrice = 4900;
             car.Description = "Araç ikinin açıklaması";
@@ -128,17 +128,17 @@ namespace ConsoleUI
             carManager.AddOrEdit(car);
 
             car.Id = 0;
-            car.BrandId = brandManager.Get(b => b.BrandName == "Marka3").Id;
-            car.ColorId = colorManager.Get(c => c.ColorName == "Sari").Id;
+            car.BrandId = brandManager.Get(b => b.BrandName == "Marka3").Data.Id;
+            car.ColorId = colorManager.Get(c => c.ColorName == "Sari").Data.Id;
             car.ModelYear = Convert.ToDateTime("03.02.1988");
             car.DailyPrice = 8000;
             car.Description = "Araç üçün açıklaması";
 
             carManager.AddOrEdit(car);
 
-            var CarList = from c in carManager.GetAll()
-                          join b in brandManager.GetAll() on c.BrandId equals b.Id
-                          join clr in colorManager.GetAll() on c.ColorId equals clr.Id
+            var CarList = from c in carManager.GetAll().Data
+                          join b in brandManager.GetAll().Data on c.BrandId equals b.Id
+                          join clr in colorManager.GetAll().Data on c.ColorId equals clr.Id
                           select new CarDTO
                           {
                               Id = c.Id,

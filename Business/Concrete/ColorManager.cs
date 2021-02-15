@@ -3,10 +3,12 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using Core.Utilities.Results.Abstract;
+using Core.Utilities.Results.Concrete;
 
 namespace Business.Concrete
 {
-    public class ColorManager : IService<Color>
+    public class ColorManager : IColorService
     {
         IColorDal _dal;
 
@@ -15,29 +17,32 @@ namespace Business.Concrete
             _dal = dal;
         }
 
-        public void AddOrEdit(Color entity)
+        public IResult AddOrEdit(Color entity)
         {
             if (entity.Id == 0)
             {
-                _dal.Add(entity);
+                return new Result(_dal.Add(entity));
             }
             else
             {
-                _dal.Update(entity);
+                return new Result(_dal.Update(entity));
             }
+            
         }
 
-        public void Delete(Color entity)
+        public IResult Delete(Color entity)
         {
-            _dal.Delete(entity);
+            return new Result(_dal.Delete(entity));
+            
+            
         }
 
-        public List<Color> GetAll(Func<Color,bool> filter = null)
+        public IDataResult<List<Color>> GetAll(Func<Color,bool> filter = null)
         {
             return _dal.GetAll(filter);
         }
 
-        public Color Get(Func<Color,bool> filter)
+        public IDataResult<Color> Get(Func<Color,bool> filter)
         {
             return _dal.Get(filter);
         }

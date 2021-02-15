@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Entities;
+using Core.Utilities.Results.Abstract;
 
 namespace Core.DataAccess.InMemory
 {
     public abstract class InMemoryBaseRepo<T> : IEntityRepo<T> where T : class, IEntity,new()
     {
         
-        int id;
+        /*int id;
         protected List<T> _entities;
 
         protected InMemoryBaseRepo()
@@ -42,7 +43,30 @@ namespace Core.DataAccess.InMemory
         {
             T deleteEntity = Get(e => e.Id == entity.Id);
             _entities.Remove(deleteEntity);
+        }*/
+
+
+        public IDataResult<List<T>> GetAll(Func<T, bool> filter = null)
+        {
+            throw new NotImplementedException();
         }
 
+        public IDataResult<T> Get(Func<T, bool> filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Add(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public abstract bool Update(T entity);
+        
+
+        public bool Delete(T entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
