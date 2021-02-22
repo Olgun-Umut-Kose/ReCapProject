@@ -13,14 +13,24 @@ namespace ConsoleUI
         static void Main(string[] args)
         {
 
-            EFColorDal eFColorDal = new EFColorDal();
-            EFBrandDal eFBrandDal = new EFBrandDal();
-            EFCarDal eFCarDal = new EFCarDal();
+            
 
-            ColorManager colorManager = new ColorManager(eFColorDal);
-            BrandManager brandManager = new BrandManager(eFBrandDal);
-            CarManager carManager = new CarManager(eFCarDal);
+            ColorManager colorManager = new ColorManager(new EFColorDal());
+            BrandManager brandManager = new BrandManager(new EFBrandDal());
+            CarManager carManager = new CarManager(new EFCarDal());
+            CustomerManager customerManager = new CustomerManager(new EFCustomerDal());
+            RentalManager rentalManager = new RentalManager(new EFRentalDal());
+            UserManager userManager = new UserManager(new EFUserDal());
+
             //Test(colorManager, brandManager, carManager);
+            //CarDtoTest(brandManager, colorManager, carManager);
+            var result = userManager.Delete(new User{Id = 1});
+           Console.WriteLine(result.Message);
+
+        }
+
+        private static void CarDtoTest(BrandManager brandManager, ColorManager colorManager, CarManager carManager)
+        {
             Car car = new Car
             {
                 Id = 0,
@@ -68,7 +78,7 @@ namespace ConsoleUI
 
             carManager.AddOrEdit(car);
 
-            
+
             foreach (CarDTO carDTO in carManager.GetCarDetails().Data)
             {
                 Console.WriteLine($"Id: {carDTO.Id}, " +
@@ -79,8 +89,6 @@ namespace ConsoleUI
                                   $"Açıklama: {carDTO.Description}, " +
                                   $"Model Yılı: {carDTO.ModelYear}\n");
             }
-            
-
         }
 
         private static void Test(ColorManager colorManager, BrandManager brandManager, CarManager carManager)

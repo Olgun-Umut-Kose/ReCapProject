@@ -27,5 +27,10 @@ namespace DataAccess.Concrete.InMemory
         {
             throw new NotImplementedException();
         }
+
+        public IDataResult<bool?> CheckRentalsForCars(Car entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

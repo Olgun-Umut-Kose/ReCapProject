@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using Entities.Concrete.DTOs;
+using Business.Constants;
 
 
 namespace Business.Concrete
@@ -42,7 +43,14 @@ namespace Business.Concrete
 
         public IResult Delete(Car entity)
         {
-            return new Result(_dal.Delete(entity));
+            bool? result = _dal.CheckRentalsForCars(entity).Data;
+            if (result != null && (bool) !result)
+            {
+                return new Result(_dal.Delete(entity));
+                    
+            }
+
+            return new ErrorResult(Messages.CarError);
         }
 
         public IDataResult<List<Car>> GetAll(Func<Car,bool> filter = null)

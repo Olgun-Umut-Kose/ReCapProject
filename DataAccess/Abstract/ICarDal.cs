@@ -9,5 +9,6 @@ namespace DataAccess.Abstract
     public interface ICarDal : IEntityRepo<Car>
     {
         IDataResult<List<CarDTO>> GetCarDetails();
+        IDataResult<bool?> CheckRentalsForCars(Car entity);
     }
 }
