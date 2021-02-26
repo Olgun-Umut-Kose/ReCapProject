@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Core.DataAccess.InMemory;
+using Core.Utilities.Results.Abstract;
 using DataAccess.Abstract;
 
 namespace DataAccess.Concrete.InMemory
@@ -13,9 +14,9 @@ namespace DataAccess.Concrete.InMemory
         {
            
         }
-        public override bool Update(Color entity)
+        public override void Update(Color entity)
         {
-            return true;
+            throw new NotImplementedException();
         }
     }
 }

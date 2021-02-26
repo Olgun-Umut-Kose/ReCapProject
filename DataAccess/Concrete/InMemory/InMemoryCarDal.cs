@@ -12,23 +12,24 @@ namespace DataAccess.Concrete.InMemory
 {
     public class InMemoryCarDal : InMemoryBaseRepo<Car>, ICarDal
     {
-        public override bool Update(Car entity)
+        public override void Update(Car entity)
         {
-            Car updateCar = Get(e => e.Id == entity.Id).Data;
+            Car updateCar = Get(e => e.Id == entity.Id);
             updateCar.BrandId = entity.BrandId;
             updateCar.ColorId = entity.ColorId;
             updateCar.DailyPrice = entity.DailyPrice;
             updateCar.Description = entity.Description;
             updateCar.ModelYear = entity.ModelYear;
-            return true;
+            throw new NotImplementedException();
         }
 
-        public IDataResult<List<CarDTO>> GetCarDetails()
+
+        public List<CarDTO> GetCarDetails()
         {
             throw new NotImplementedException();
         }
 
-        public IDataResult<bool?> CheckRentalsForCars(Car entity)
+        public bool CheckRentalsForCars(Car entity)
         {
             throw new NotImplementedException();
         }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Core.DataAccess.InMemory;
+using Core.Utilities.Results.Abstract;
 using DataAccess.Abstract;
 
 namespace DataAccess.Concrete.InMemory
@@ -10,11 +11,12 @@ namespace DataAccess.Concrete.InMemory
     public class InMemoryBrandDal : InMemoryBaseRepo<Brand>, IBrandDal
     {
         
-        public override bool Update(Brand entity)
+        public override void Update(Brand entity)
         {
-            Brand updateBrand = Get(e => entity.Id == e.Id).Data;
+            Brand updateBrand = Get(e => entity.Id == e.Id);
             updateBrand.BrandName = entity.BrandName;
-            return true;
+            throw new NotImplementedException();
         }
+        
     }
 }

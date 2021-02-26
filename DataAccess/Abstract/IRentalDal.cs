@@ -8,7 +8,5 @@ namespace DataAccess.Abstract
     public interface IRentalDal : IEntityRepo<Rental>
     {
 
-        IDataResult<bool?> Any(Func<Rental, bool> filter);
-
     }
 }

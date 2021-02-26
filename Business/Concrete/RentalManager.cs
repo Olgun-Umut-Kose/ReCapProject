@@ -6,6 +6,7 @@ using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Business.Concrete
 {
@@ -20,41 +21,84 @@ namespace Business.Concrete
 
         public IDataResult<List<Rental>> GetAll(Func<Rental, bool> filter = null)
         {
-            return _dal.GetAll(filter);
+            try
+            {
+                return new SuccessDataResult<List<Rental>>(Messages.Success, _dal.GetAll(filter));
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<List<Rental>>(Messages.Error + e.Message, null);
+            }
         }
 
         public IDataResult<Rental> Get(Func<Rental, bool> filter)
         {
-            return _dal.Get(filter);
+            try
+            {
+                return new SuccessDataResult<Rental>(Messages.Success, _dal.Get(filter));
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<Rental>(Messages.Error + e.Message, null);
+            }
+        }
+
+        public IDataResult<Rental> GetById(int id)
+        {
+            try
+            {
+                return new SuccessDataResult<Rental>(Messages.Success, _dal.Get(r => r.Id.Equals(id)));
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<Rental>(Messages.Error + e.Message, null);
+            }
         }
 
         public IResult AddOrEdit(Rental entity)
         {
-            if (entity.Id == 0)
+            try
             {
-                bool? result = _dal.Any(r => r.CarId == entity.CarId && r.ReturnDate == null).Data;
-                if (result != null && (bool) !result)
+                if (entity.Id == 0)
                 {
-                    return new Result(_dal.Add(entity));
-                    
+                    bool result = _dal.Any(r => r.CarId == entity.CarId && r.ReturnDate == null);
+                    if (!result)
+                    {
+                        _dal.Add(entity);
+                        return new SuccessResult(Messages.Added);
+                    }
+
+                    return new ErrorResult(Messages.CarError);
                 }
-                return new ErrorResult(message: Messages.CarError);
+                else
+                {
+                    _dal.Update(entity);
+                    return new SuccessResult(Messages.Updated);
+                }
             }
-            else
+            catch (Exception e)
             {
-                return new Result(_dal.Update(entity));
+                return new ErrorResult(Messages.Error + e.Message);
             }
         }
 
         public IResult Delete(Rental entity)
         {
-            bool? result = _dal.Any(r => r.CarId == entity.CarId && r.ReturnDate == null).Data;
-            if (result != null && (bool) !result)
+            try
             {
-                return new Result(_dal.Delete(entity));
-                    
+                bool result = _dal.Any(r => r.CarId == entity.CarId && r.ReturnDate == null);
+                if (!result)
+                {
+                    _dal.Delete(entity);
+                    return new SuccessResult(Messages.Deleted);
+                }
+
+                return new ErrorResult(message: Messages.CarError);
             }
-            return new ErrorResult(message: Messages.CarError);
+            catch (Exception e)
+            {
+                return new ErrorResult(Messages.Error + e.Message);
+            }
         }
     }
 }

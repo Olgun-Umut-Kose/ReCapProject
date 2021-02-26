@@ -46,25 +46,30 @@ namespace Core.DataAccess.InMemory
         }*/
 
 
-        public IDataResult<List<T>> GetAll(Func<T, bool> filter = null)
+        public List<T> GetAll(Func<T, bool> filter = null)
         {
             throw new NotImplementedException();
         }
 
-        public IDataResult<T> Get(Func<T, bool> filter)
+        public T Get(Func<T, bool> filter)
         {
             throw new NotImplementedException();
         }
 
-        public bool Add(T entity)
+        public void Add(T entity)
         {
             throw new NotImplementedException();
         }
 
-        public abstract bool Update(T entity);
+        public abstract void Update(T entity);
         
 
-        public bool Delete(T entity)
+        public void Delete(T entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Any(Func<T, bool> filter)
         {
             throw new NotImplementedException();
         }

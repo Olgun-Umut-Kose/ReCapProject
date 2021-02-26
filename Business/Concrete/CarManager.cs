@@ -20,52 +20,106 @@ namespace Business.Concrete
             _dal = dal;
         }
 
+        public IDataResult<Car> GetById(int id)
+        {
+            try
+            {
+                return new SuccessDataResult<Car>(Messages.Success, _dal.Get(c => c.Id.Equals(id)));
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<Car>(Messages.Error + e.Message, null);
+            }
+        }
+
         public IResult AddOrEdit(Car entity)
         {
 
-            if (entity.Description.Length > 2 && entity.DailyPrice > 0)
+            if (entity.Description.Length < 2)
             {
-                if (entity.Id == 0)
-                {
-                    return new Result(_dal.Add(entity));
-                }
-                else
-                {
-                    return new Result(_dal.Update(entity));
-                }
+                return new ErrorResult(Messages.DescriptionError);
+            }
+            else if(entity.DailyPrice < 0)
+            {
+                return new ErrorResult(Messages.DailyPriceError);
             }
             else
             {
-                return new ErrorResult("değişiklik yapamazsın çünkü kurallara uymuyorsun");
+                try
+                {
+                    if (entity.Id == 0)
+                    {
+                        _dal.Add(entity);
+                        return new SuccessResult(Messages.Added);
+                    }
+                    else
+                    {
+                        _dal.Update(entity);
+                        return new SuccessResult(Messages.Updated);
+                    }
+                }
+                catch (Exception e)
+                {
+                    return new ErrorResult(Messages.Error + e.Message);
+                }
+                
             }
             
         }
 
         public IResult Delete(Car entity)
         {
-            bool? result = _dal.CheckRentalsForCars(entity).Data;
-            if (result != null && (bool) !result)
+            try
             {
-                return new Result(_dal.Delete(entity));
-                    
-            }
+                bool result = _dal.CheckRentalsForCars(entity);
+                if (!result)
+                {
+                    _dal.Delete(entity);
+                    return new SuccessResult(Messages.Deleted);
+                }
 
-            return new ErrorResult(Messages.CarError);
+                return new ErrorResult(Messages.CarError);
+            }
+            catch (Exception e)
+            {
+                return new ErrorResult(Messages.Error + e.Message);
+            }
         }
 
         public IDataResult<List<Car>> GetAll(Func<Car,bool> filter = null)
         {
-            return _dal.GetAll(filter);
+            try
+            {
+                return new SuccessDataResult<List<Car>>(Messages.Success, _dal.GetAll(filter));
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<List<Car>>(Messages.Error + e.Message, null);
+            }
         }
 
         public IDataResult<Car> Get(Func<Car,bool> filter)
         {
-            return _dal.Get(filter);
+            try
+            {
+                return new SuccessDataResult<Car>(Messages.Success, _dal.Get(filter));
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<Car>(Messages.Error + e.Message, null);
+            }
         }
 
         public IDataResult<List<CarDTO>> GetCarDetails()
         {
-            return _dal.GetCarDetails();
+            try
+            {
+                return new SuccessDataResult<List<CarDTO>>(Messages.Success, _dal.GetCarDetails());
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<List<CarDTO>>(Messages.Error + e.Message, null);
+            }
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int id)

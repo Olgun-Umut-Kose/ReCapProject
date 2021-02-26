@@ -10,22 +10,14 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EFCustomerDal : EFEntityRepoBase<Customer,ReCapContext>, ICustomerDal
+    public class EFCustomerDal : EFEntityRepoBase<Customer, ReCapContext>, ICustomerDal
     {
-        public IDataResult<bool?> CheckRentalsForCustomers(Customer customer)
+        public bool CheckRentalsForCustomers(Customer customer)
         {
-            try
+            using (ReCapContext context = new ReCapContext())
             {
-                using (ReCapContext context = new ReCapContext())
-                {
-                    return new SuccessDataResult<bool?>(context.Rentals.Any(r =>
-                        r.CustomerId == customer.Id && r.ReturnDate == null));
-                }
-                
-            }
-            catch (Exception)
-            {
-                return new ErrorDataResult<bool?>(null);
+                return context.Rentals.Any(r =>
+                    r.CustomerId == customer.Id && r.ReturnDate == null);
             }
         }
     }

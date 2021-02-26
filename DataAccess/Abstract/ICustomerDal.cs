@@ -6,6 +6,6 @@ namespace DataAccess.Abstract
 {
     public interface ICustomerDal : IEntityRepo<Customer>
     {
-        IDataResult<bool?> CheckRentalsForCustomers(Customer customer);
+        bool CheckRentalsForCustomers(Customer customer);
     }
 }
