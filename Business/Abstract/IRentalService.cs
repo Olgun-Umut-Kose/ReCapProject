@@ -5,6 +5,6 @@ namespace Business.Abstract
 {
     public interface IRentalService : IEntityService<Rental>
     {
-        
+        IResult AddOrEdit(Rental entity);
     }
 }

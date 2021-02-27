@@ -12,7 +12,6 @@
         public static string DailyPriceError = "Günlük fiyat 0 dan küçük olamaz";
         public static string DescriptionError = "Açıklama 2 karakterden kısa olamaz";
         public static string RentalSuccess = "Araç kiralandı";
-
-
+        public static string CarImageLimitError = "Bir aracın en fazla 5 resmi olabilir";
     }
 }

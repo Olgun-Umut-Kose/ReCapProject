@@ -12,7 +12,7 @@ namespace Business.Abstract
         IDataResult<List<T>> GetAll(Func<T,bool> filter = null);
         IDataResult<T> Get(Func<T,bool> filter);
         IDataResult<T> GetById(int id);
-        IResult AddOrEdit(T entity);
+        
         IResult Delete(T entity);
     }
 }
