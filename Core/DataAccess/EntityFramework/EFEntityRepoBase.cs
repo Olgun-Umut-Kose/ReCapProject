@@ -12,6 +12,7 @@ namespace Core.DataAccess.EntityFramework
         where TContext : DbContext, new()
     {
         
+
         public void Add(TEntity entity)
         {
 

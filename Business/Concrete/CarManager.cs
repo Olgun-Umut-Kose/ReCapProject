@@ -7,6 +7,8 @@ using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using Entities.Concrete.DTOs;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspect.AutoFac;
 
 
 namespace Business.Concrete
@@ -32,40 +34,21 @@ namespace Business.Concrete
             }
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult AddOrEdit(Car entity)
         {
-
-            if (entity.Description.Length < 2)
+            if (entity.Id == 0)
             {
-                return new ErrorResult(Messages.DescriptionError);
-            }
-            else if(entity.DailyPrice < 0)
-            {
-                return new ErrorResult(Messages.DailyPriceError);
+                _dal.Add(entity);
+                return new SuccessResult(Messages.Added);
             }
             else
             {
-                try
-                {
-                    if (entity.Id == 0)
-                    {
-                        _dal.Add(entity);
-                        return new SuccessResult(Messages.Added);
-                    }
-                    else
-                    {
-                        _dal.Update(entity);
-                        return new SuccessResult(Messages.Updated);
-                    }
-                }
-                catch (Exception e)
-                {
-                    return new ErrorResult(Messages.Error + e.Message);
-                }
-                
+                _dal.Update(entity);
+                return new SuccessResult(Messages.Updated);
             }
-            
         }
+
 
         public IResult Delete(Car entity)
         {
@@ -86,7 +69,7 @@ namespace Business.Concrete
             }
         }
 
-        public IDataResult<List<Car>> GetAll(Func<Car,bool> filter = null)
+        public IDataResult<List<Car>> GetAll(Func<Car, bool> filter = null)
         {
             try
             {
@@ -98,7 +81,7 @@ namespace Business.Concrete
             }
         }
 
-        public IDataResult<Car> Get(Func<Car,bool> filter)
+        public IDataResult<Car> Get(Func<Car, bool> filter)
         {
             try
             {
