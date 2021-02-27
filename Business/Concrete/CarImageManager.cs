@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Business.Abstract;
 using Business.Constants;
 using Core.Utilities.Business;
@@ -98,6 +100,41 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.Error + e.Message+"--"+ e.InnerException?.Message);
             }
+        }
+
+        public IDataResult<List<string>> GetImagesByCarId(int carId)
+        {
+            try
+            {
+                IResult result = BusinessRules.Run(CheckCarImage(carId));
+                if (result != null)
+                {
+                    return new SuccessDataResult<List<string>>(Messages.Success,
+                        new List<string>{Path.Combine(Environment.CurrentDirectory, @"wwwroot\Image\default.png").ToString()});
+                }
+
+                List<string> Images = new List<string>();
+
+                _dal.GetAll(ci => ci.CarId == carId).ForEach(x =>
+                {
+                    Images.Add(x.ImagePath);
+                });
+                return new SuccessDataResult<List<string>>(Messages.Success, Images);
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<List<string>>(Messages.Error + e.Message, null);
+            }
+        }
+
+        private IResult CheckCarImage(int carId)
+        {
+            if (_dal.GetAll(ci => ci.CarId == carId).Count <= 0)
+            {
+                return new ErrorResult();
+            }
+
+            return new SuccessResult();
         }
 
         private IResult CheckCarImageLimit(CarImage entity)
