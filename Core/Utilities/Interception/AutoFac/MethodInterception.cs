@@ -11,7 +11,7 @@ namespace Core.Utilities.Interception.AutoFac
 
         protected virtual void OnException(IInvocation invocation, Exception e)
         {
-            invocation.ReturnValue = new ErrorResult("Bir sorun ile karşılaşıldı: " + e.Message);
+            invocation.ReturnValue = new ErrorResult("Bir sorun ile karşılaşıldı: " + e.Message + "inner: " + e.InnerException.Message);
         }
         protected virtual void OnSuccess(IInvocation invocation){}
         

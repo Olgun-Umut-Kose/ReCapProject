@@ -6,6 +6,7 @@ using Business.Concrete;
 using Castle.DynamicProxy;
 using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Core.Utilities.Interception.AutoFac;
+using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
@@ -32,6 +33,11 @@ namespace Business.DependencyResolvers.AutoFac
             builder.RegisterType<EFRentalDal>().As<IRentalDal>().SingleInstance();
             builder.RegisterType<EFUserDal>().As<IUserDal>().SingleInstance();
             builder.RegisterType<EFCarImageDal>().As<ICarImageDal>().SingleInstance();
+            
+            builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();
+            builder.RegisterType<EFUserDal>().As<IUserDal>().SingleInstance();
+            builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
+            builder.RegisterType<JWTHelper>().As<ITokenHelper>().SingleInstance();
 
             Assembly assembly = Assembly.GetExecutingAssembly();
             

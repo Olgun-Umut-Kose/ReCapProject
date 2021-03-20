@@ -1,10 +1,19 @@
-﻿using Core.Utilities.Results.Abstract;
-using Entities.Concrete;
+﻿using System.Collections.Generic;
+using Core.Entities.Concrete;
+using Core.Utilities.Results.Abstract;
+
 
 namespace Business.Abstract
 {
-    public interface IUserService : IEntityService<User>
+    
+
+    public interface IUserService
     {
-        IResult AddOrEdit(User entity);
+        IDataResult<List<OperationClaim>> GetClaims(User user);
+
+        IResult Add(User user);
+
+        IDataResult<User> GetByMail(string email);
+        
     }
 }

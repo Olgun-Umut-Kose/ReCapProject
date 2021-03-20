@@ -24,8 +24,7 @@ namespace ConsoleUI
 
             //Test(colorManager, brandManager, carManager);
             //CarDtoTest(brandManager, colorManager, carManager);
-            var result = userManager.Delete(new User{Id = 1});
-           Console.WriteLine(result.Message);
+            
 
         }
 

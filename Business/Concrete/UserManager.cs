@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Business.Abstract;
 using Business.Constants;
+using Core.Entities.Concrete;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
-using Entities.Concrete;
+
 
 namespace Business.Concrete
 {
@@ -19,82 +20,47 @@ namespace Business.Concrete
         }
 
 
-        public IDataResult<List<User>> GetAll(Func<User, bool> filter = null)
+        public IDataResult<List<OperationClaim>> GetClaims(User user)
         {
             try
             {
-                return new SuccessDataResult<List<User>>(Messages.Success, _dal.GetAll(filter));
+                List<OperationClaim> result = _dal.GetClaims(user);
+                return new SuccessDataResult<List<OperationClaim>>(Messages.Success, result);
             }
             catch (Exception e)
             {
-                return new ErrorDataResult<List<User>>(Messages.Error + e.Message, null);
+                return new ErrorDataResult<List<OperationClaim>>(Messages.Error + e.Message, null);
+                
             }
-        }
-
-        public IDataResult<User> Get(Func<User, bool> filter)
-        {
-            try
-            {
-                return new SuccessDataResult<User>(Messages.Success, _dal.Get(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<User>(Messages.Error + e.Message, null);
-            }
-        }
-
-        public IDataResult<User> GetById(int id)
-        {
-            try
-            {
-                return new SuccessDataResult<User>(Messages.Success, _dal.Get(u => u.Id.Equals(id)));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<User>(Messages.Error + e.Message, null);
-            }
-        }
-
-        public IResult AddOrEdit(User entity)
-        {
-
-            try
-            {
-                if (entity.Id == 0)
-                {
-                    _dal.Add(entity);
-                    return new SuccessResult(Messages.Added);
-                }
-                else
-                {
-                    _dal.Update(entity);
-                    return new SuccessResult(Messages.Updated);
-                }
-            }
-            catch (Exception e)
-            {
-                return new ErrorResult(Messages.Error + e.Message);
-            }
+            
             
         }
 
-        public IResult Delete(User entity)
+        public IResult Add(User user)
         {
             try
             {
-                bool result = _dal.CheckCustomersForUsers(entity);
-                if (!result)
-                {
-                    _dal.Delete(entity);
-                    return new SuccessResult(Messages.Deleted);
-                }
-
-                return new ErrorResult(Messages.CustomerorUserDeleteError);
+                _dal.Add(user);
+                return new SuccessResult(Messages.Success);
             }
             catch (Exception e)
             {
                 return new ErrorResult(Messages.Error + e.Message);
             }
+        }
+
+        public IDataResult<User> GetByMail(string email)
+        {
+            try
+            {
+                User result = _dal.Get(u => u.Email == email);
+                return new SuccessDataResult<User>(Messages.Success, result);
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<User>(Messages.Error + e.Message, null);
+            }
+            
         }
     }
 }
