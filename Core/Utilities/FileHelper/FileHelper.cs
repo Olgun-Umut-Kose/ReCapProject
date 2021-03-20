@@ -17,10 +17,7 @@ namespace Core.Utilities.FileHelper
                     var creatorResult = PathCreator(file, type);
 
 
-                    if (!CheckDirectoryExists(creatorResult.klasorYolu))
-                    {
-                        Directory.CreateDirectory(creatorResult.klasorYolu);
-                    }
+                    CheckDirectoryExistsAndCreate(creatorResult.klasorYolu);
 
 
                     using (FileStream fs = System.IO.File.Create(creatorResult.dosyaYolu))
@@ -55,16 +52,19 @@ namespace Core.Utilities.FileHelper
             
         }
 
-        private static bool CheckDirectoryExists(string klasorYolu)
+        private static void CheckDirectoryExistsAndCreate(string klasorYolu)
         {
-            return Directory.Exists(klasorYolu);
+            if(!Directory.Exists(klasorYolu))
+			{
+				Directory.CreateDirectory(klasorYolu);
+			}
         }
 
         private static (string dosyaAdi, string klasorYolu, string dosyaYolu) PathCreator(IFormFile file, string type)
         {
             string uzanti = Path.GetExtension(file.FileName);
             string dosyaAdi = Guid.NewGuid().ToString("D") + uzanti;
-            string klasorYolu = Path.Combine(Environment.CurrentDirectory, @"wwwroot\Images");
+            string klasorYolu = Path.Combine(Environment.CurrentDirectory, @"wwwroot\type");
             string dosyaYolu = Path.Combine(klasorYolu, dosyaAdi);
             return (dosyaAdi, klasorYolu, dosyaYolu);
         }
