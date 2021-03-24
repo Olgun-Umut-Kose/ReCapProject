@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
+using Core.Aspect.AutoFac.Performance;
 
 namespace Core.Utilities.Interception.AutoFac
 {
@@ -14,6 +15,7 @@ namespace Core.Utilities.Interception.AutoFac
                 type?.GetCustomAttributes<MethodInterceptionBaseAttribute>(true).ToList();
             var methodAttributes = type?.GetMethod(method.Name)?.GetCustomAttributes<MethodInterceptionBaseAttribute>(true);
             classAttributes?.AddRange(methodAttributes);
+            classAttributes?.Add(new PerformanceAspect(1));
 
             // ReSharper disable once CoVariantArrayConversion
             return classAttributes?.OrderByDescending(x => x.Priority).ToArray();

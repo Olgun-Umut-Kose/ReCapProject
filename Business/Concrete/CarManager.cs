@@ -10,6 +10,7 @@ using Entities.Concrete.DTOs;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspect.AutoFac;
+using Core.Aspect.AutoFac.Caching;
 
 
 namespace Business.Concrete
@@ -22,7 +23,8 @@ namespace Business.Concrete
         {
             _dal = dal;
         }
-
+        
+        [CacheAspect()]
         public IDataResult<Car> GetById(int id)
         {
             try
@@ -36,6 +38,7 @@ namespace Business.Concrete
         }
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult AddOrEdit(Car entity)
         {
             if (entity.Id == 0)
@@ -50,7 +53,7 @@ namespace Business.Concrete
             }
         }
 
-
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car entity)
         {
             try
@@ -69,7 +72,8 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.Error + e.Message);
             }
         }
-
+        
+        [CacheAspect()]
         public IDataResult<List<Car>> GetAll(Func<Car, bool> filter = null)
         {
             try
