@@ -33,5 +33,10 @@ namespace DataAccess.Concrete.InMemory
         {
             throw new NotImplementedException();
         }
+
+        public List<CarDTO> GetCarDetails(Func<CarDTO, bool> filter = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

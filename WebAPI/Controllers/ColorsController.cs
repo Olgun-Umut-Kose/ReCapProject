@@ -6,11 +6,11 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ColorController : Controller
+    public class ColorsController : Controller
     {
         private IColorService _service;
 
-        public ColorController(IColorService service)
+        public ColorsController(IColorService service)
         {
             _service = service;
         }

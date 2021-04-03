@@ -3,6 +3,8 @@ using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
 using Business.BusinessAspects.AutoFac;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
@@ -11,6 +13,8 @@ using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspect.AutoFac;
 using Core.Aspect.AutoFac.Caching;
+using Core.Utilities.Filter;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 
 namespace Business.Concrete
@@ -18,10 +22,12 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _dal;
+        IBrandService _brandService;
 
-        public CarManager(ICarDal dal)
+        public CarManager(ICarDal dal, IBrandService brandService)
         {
             _dal = dal;
+            _brandService = brandService;
         }
         
         [CacheAspect()]
@@ -98,11 +104,11 @@ namespace Business.Concrete
             }
         }
 
-        public IDataResult<List<CarDTO>> GetCarDetails()
+        public IDataResult<List<CarDTO>> GetCarDetails(Func<CarDTO,bool> filter = null)
         {
             try
             {
-                return new SuccessDataResult<List<CarDTO>>(Messages.Success, _dal.GetCarDetails());
+                return new SuccessDataResult<List<CarDTO>>(Messages.Success, _dal.GetCarDetails(filter));
             }
             catch (Exception e)
             {
@@ -118,6 +124,30 @@ namespace Business.Concrete
         public IDataResult<List<Car>> GetCarsByColorId(int id)
         {
             return GetAll(c => c.ColorId == id);
+        }
+
+        public IDataResult<List<CarDTO>> GetCarDetailsFilter(CarDetailFilterDto filterDto)
+        {
+            try
+            {
+                foreach (PropertyInfo property in filterDto.GetType().GetProperties())
+                {
+                    if ( (int)property.GetValue(filterDto) == 0)
+                    {
+                        property.SetValue(filterDto,null);
+                    }
+                }
+
+            
+                Func<CarDTO, bool> filter = FilterHelper.DynamicFilter<CarDTO, CarDetailFilterDto>(filterDto);
+                return GetCarDetails(filter);
+            }
+            catch (Exception e)
+            {
+                return new ErrorDataResult<List<CarDTO>>(
+                    Messages.Error + e.Message + "inner" + e.InnerException.Message, null);
+            }
+            
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.Utilities.Results.Abstract;
 using Entities.Concrete;
+using Entities.Concrete.DTOs;
 
 namespace Business.Abstract
 {
@@ -14,5 +15,6 @@ namespace Business.Abstract
         IDataResult<Rental> GetById(int id);
         
         IResult Delete(Rental entity);
+        IDataResult<List<RentalDTO>> GetRentalDetails();
     }
 }

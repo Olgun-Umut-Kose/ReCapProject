@@ -8,7 +8,7 @@ namespace Business.Abstract
 {
     public interface ICarService
     {
-        IDataResult<List<CarDTO>> GetCarDetails();
+        IDataResult<List<CarDTO>> GetCarDetails(Func<CarDTO,bool> filter = null);
         IDataResult<List<Car>> GetCarsByBrandId(int id);
         IDataResult<List<Car>> GetCarsByColorId(int id);
         
@@ -19,5 +19,6 @@ namespace Business.Abstract
         IDataResult<Car> GetById(int id);
         
         IResult Delete(Car entity);
+        IDataResult<List<CarDTO>> GetCarDetailsFilter(CarDetailFilterDto filterDto);
     }
 }

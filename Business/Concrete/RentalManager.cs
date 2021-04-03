@@ -6,6 +6,7 @@ using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.Concrete.DTOs;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Business.Concrete
@@ -99,6 +100,11 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.Error + e.Message);
             }
+        }
+
+        public IDataResult<List<RentalDTO>> GetRentalDetails()
+        {
+            return new SuccessDataResult<List<RentalDTO>>(Messages.Success, _dal.GetRentalDetails());
         }
     }
 }

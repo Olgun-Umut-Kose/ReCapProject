@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Entities.Concrete.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
@@ -75,7 +76,24 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
-        
+        [HttpGet("getcardetailsbyfilter")]
+        public IActionResult GetCarDetailsFilter(int brandid, int colorid)
+        {
+            CarDetailFilterDto filterDto = new CarDetailFilterDto
+            {
+                BrandId = brandid,
+                ColorId = colorid,
+            };
+            
+            var result = _service.GetCarDetailsFilter(filterDto);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
         [HttpGet("getcarsbycolorid")]
         public IActionResult GetCarsByColorId(int id)
         {

@@ -17,7 +17,7 @@ namespace ConsoleUI
 
             ColorManager colorManager = new ColorManager(new EFColorDal());
             BrandManager brandManager = new BrandManager(new EFBrandDal());
-            CarManager carManager = new CarManager(new EFCarDal());
+            
             CustomerManager customerManager = new CustomerManager(new EFCustomerDal());
             RentalManager rentalManager = new RentalManager(new EFRentalDal());
             UserManager userManager = new UserManager(new EFUserDal());
@@ -83,7 +83,7 @@ namespace ConsoleUI
                 Console.WriteLine($"Id: {carDTO.Id}, " +
                                   $"Marka Adı: {carDTO.BrandName}, " +
                                   $"Rengi: {carDTO.ColorName}, " +
-                                  $"Renk Hex Kodu: {carDTO.ColorsHexCode}, " +
+                                  $"Renk Hex Kodu: {carDTO.ColorHexCode}, " +
                                   $"Günlük Fiyatı: {carDTO.DailyPrice}, " +
                                   $"Açıklama: {carDTO.Description}, " +
                                   $"Model Yılı: {carDTO.ModelYear}\n");
@@ -151,7 +151,7 @@ namespace ConsoleUI
                               Id = c.Id,
                               BrandName = b.BrandName,
                               ColorName = clr.ColorName,
-                              ColorsHexCode = clr.HexCode,
+                              ColorHexCode = clr.HEXCode,
                               DailyPrice = c.DailyPrice,
                               Description = c.Description,
                               ModelYear = c.ModelYear.Year
@@ -162,7 +162,7 @@ namespace ConsoleUI
                 Console.WriteLine($"Id: {carDTO.Id}, " +
                     $"Marka Adı: {carDTO.BrandName}, " +
                     $"Rengi: {carDTO.ColorName}, " +
-                    $"Renk Hex Kodu: {carDTO.ColorsHexCode}, " +
+                    $"Renk Hex Kodu: {carDTO.ColorHexCode}, " +
                     $"Günlük Fiyatı: {carDTO.DailyPrice}, " +
                     $"Açıklama: {carDTO.Description}, " +
                     $"Model Yılı: {carDTO.ModelYear}\n");
