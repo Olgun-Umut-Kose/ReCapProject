@@ -9,6 +9,8 @@ namespace Business.Abstract
     public interface ICarService
     {
         IDataResult<List<CarDTO>> GetCarDetails(Func<CarDTO,bool> filter = null);
+        IDataResult<CarDTO> GetCarDetailById(int id);
+        IDataResult<CarDTO> GetCarDetail(Func<CarDTO,bool> filter);
         IDataResult<List<Car>> GetCarsByBrandId(int id);
         IDataResult<List<Car>> GetCarsByColorId(int id);
         

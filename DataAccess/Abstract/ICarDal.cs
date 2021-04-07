@@ -10,6 +10,7 @@ namespace DataAccess.Abstract
     public interface ICarDal : IEntityRepo<Car>
     {
         List<CarDTO> GetCarDetails(Func<CarDTO,bool> filter = null);
+        CarDTO GetCarDetail(Func<CarDTO,bool> filter = null);
         bool CheckRentalsForCars(Car entity);
     }
 }

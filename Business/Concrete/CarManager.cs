@@ -116,6 +116,16 @@ namespace Business.Concrete
             }
         }
 
+        public IDataResult<CarDTO> GetCarDetailById(int id)
+        {
+            return GetCarDetail(c => c.Id == id);
+        }
+
+        public IDataResult<CarDTO> GetCarDetail(Func<CarDTO,bool> filter)
+        {
+            return new SuccessDataResult<CarDTO>(Messages.Success,_dal.GetCarDetail(filter)) ;
+        }
+
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
         {
             return GetAll(c => c.BrandId == id);

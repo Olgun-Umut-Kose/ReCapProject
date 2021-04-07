@@ -45,6 +45,7 @@ namespace WebAPI.Controllers
         public IActionResult Delete(CarImage carImage)
         {
             var result = _service.Delete(carImage);
+            
             if (result.Success)
             {
                 return Ok(result);
@@ -52,5 +53,19 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
+
+        [HttpGet("getimagesbycarid")]
+        public IActionResult GetImagesByCarId(int carid)
+        {
+            var result = _service.GetImagesByCarId(carid);
+            
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
     }
 }

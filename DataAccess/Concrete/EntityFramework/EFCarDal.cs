@@ -38,6 +38,29 @@ namespace DataAccess.Concrete.EntityFramework
             }
         }
 
+        public CarDTO GetCarDetail(Func<CarDTO, bool> filter)
+        {
+            using (ReCapContext context = new ReCapContext())
+            {
+                var Car = from c in context.Cars
+                    join b in context.Brands on c.BrandId equals b.Id
+                    join clr in context.Colors on c.ColorId equals clr.Id
+                    select new CarDTO
+                    {
+                        Id = c.Id,
+                        BrandId = c.BrandId,
+                        BrandName = b.BrandName,
+                        ColorId = c.ColorId,
+                        ColorName = clr.ColorName,
+                        ColorHexCode = clr.HEXCode,
+                        DailyPrice = c.DailyPrice,
+                        Description = c.Description,
+                        ModelYear = c.ModelYear.Year
+                    };
+                return Car.FirstOrDefault(filter);
+            } 
+        }
+
         public bool CheckRentalsForCars(Car entity)
         {
             using (ReCapContext context = new ReCapContext())

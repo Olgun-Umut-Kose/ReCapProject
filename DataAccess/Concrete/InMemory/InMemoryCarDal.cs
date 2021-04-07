@@ -29,6 +29,11 @@ namespace DataAccess.Concrete.InMemory
             throw new NotImplementedException();
         }
 
+        public CarDTO GetCarDetail(Func<CarDTO, bool> filter = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool CheckRentalsForCars(Car entity)
         {
             throw new NotImplementedException();

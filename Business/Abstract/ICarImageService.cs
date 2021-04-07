@@ -15,6 +15,8 @@ namespace Business.Abstract
         IDataResult<CarImage> Get(Func<CarImage,bool> filter);
         IDataResult<CarImage> GetById(int id);
         
+        
+        
         IResult Delete(CarImage entity);
     }
 }
