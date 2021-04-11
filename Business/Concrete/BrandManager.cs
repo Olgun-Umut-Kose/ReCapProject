@@ -20,72 +20,44 @@ namespace Business.Concrete
 
         public IDataResult<Brand> GetById(int id)
         {
-            try
-            {
-                return new SuccessDataResult<Brand>(Messages.Success, _dal.Get(b => b.Id.Equals(id)));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<Brand>(Messages.Error + e.Message, null);
-            }
+            return new SuccessDataResult<Brand>(Messages.Success, _dal.Get(b => b.Id.Equals(id)));
         }
 
         public IResult AddOrEdit(Brand entity)
         {
-            try
+            if (entity.Id == 0)
             {
-                if (entity.Id == 0)
-                {
-                    _dal.Add(entity);
-                    return new SuccessResult(Messages.Added);
-                }
-                else
-                {
-                    _dal.Update(entity);
-                    return new SuccessResult(Messages.Updated);
-                }
+                _dal.Add(entity);
+                return new SuccessResult(Messages.Added);
             }
-            catch (Exception e)
+            else
             {
-                return new ErrorResult(Messages.Error + e.Message);
+                _dal.Update(entity);
+                return new SuccessResult(Messages.Updated);
             }
+
         }
 
         public IResult Delete(Brand entity)
         {
-            try
-            {
-                _dal.Delete(entity);
-                return new SuccessResult(Messages.Deleted);
-            }
-            catch (Exception e)
-            {
-                return new ErrorResult(Messages.Error + e.Message);
-            }
+
+            _dal.Delete(entity);
+            return new SuccessResult(Messages.Deleted);
+
         }
 
-        public IDataResult<List<Brand>> GetAll(Func<Brand,bool> filter = null)
+        public IDataResult<List<Brand>> GetAll(Func<Brand, bool> filter = null)
         {
-            try
-            {
-                return new SuccessDataResult<List<Brand>>(Messages.Success, _dal.GetAll(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<List<Brand>>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<List<Brand>>(Messages.Success, _dal.GetAll(filter));
+
         }
 
-        public IDataResult<Brand> Get(Func<Brand,bool> filter)
+        public IDataResult<Brand> Get(Func<Brand, bool> filter)
         {
-            try
-            {
-                return new SuccessDataResult<Brand>(Messages.Success, _dal.Get(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<Brand>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<Brand>(Messages.Success, _dal.Get(filter));
+
         }
 
 

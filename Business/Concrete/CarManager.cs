@@ -15,7 +15,7 @@ using Core.Aspect.AutoFac;
 using Core.Aspect.AutoFac.Caching;
 using Core.Utilities.Filter;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-
+using Core.Utilities.Business;
 
 namespace Business.Concrete
 {
@@ -29,18 +29,13 @@ namespace Business.Concrete
             _dal = dal;
             _brandService = brandService;
         }
-        
+
         [CacheAspect()]
         public IDataResult<Car> GetById(int id)
         {
-            try
-            {
-                return new SuccessDataResult<Car>(Messages.Success, _dal.Get(c => c.Id.Equals(id)));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<Car>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<Car>(Messages.Success, _dal.Get(c => c.Id.Equals(id)));
+
         }
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(CarValidator))]
@@ -62,58 +57,37 @@ namespace Business.Concrete
         [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car entity)
         {
-            try
-            {
-                bool result = _dal.CheckRentalsForCars(entity);
-                if (!result)
-                {
-                    _dal.Delete(entity);
-                    return new SuccessResult(Messages.Deleted);
-                }
 
-                return new ErrorResult(Messages.CarError);
-            }
-            catch (Exception e)
+            IResult result = BusinessRules.Run(CheckRentalsForCars(entity.Id));
+            if (result != null)
             {
-                return new ErrorResult(Messages.Error + e.Message);
+                _dal.Delete(entity);
+                return new SuccessResult(Messages.Deleted);
             }
+
+            return new ErrorResult(Messages.CarError);
+
         }
-        
+
         [CacheAspect()]
         public IDataResult<List<Car>> GetAll(Func<Car, bool> filter = null)
         {
-            try
-            {
-                return new SuccessDataResult<List<Car>>(Messages.Success, _dal.GetAll(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<List<Car>>(Messages.Error + e.Message, null);
-            }
+            return new SuccessDataResult<List<Car>>(Messages.Success, _dal.GetAll(filter));
+
         }
 
         public IDataResult<Car> Get(Func<Car, bool> filter)
         {
-            try
-            {
-                return new SuccessDataResult<Car>(Messages.Success, _dal.Get(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<Car>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<Car>(Messages.Success, _dal.Get(filter));
+
         }
 
-        public IDataResult<List<CarDTO>> GetCarDetails(Func<CarDTO,bool> filter = null)
+        public IDataResult<List<CarDTO>> GetCarDetails(Func<CarDTO, bool> filter = null)
         {
-            try
-            {
-                return new SuccessDataResult<List<CarDTO>>(Messages.Success, _dal.GetCarDetails(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<List<CarDTO>>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<List<CarDTO>>(Messages.Success, _dal.GetCarDetails(filter));
+
         }
 
         public IDataResult<CarDTO> GetCarDetailById(int id)
@@ -121,9 +95,9 @@ namespace Business.Concrete
             return GetCarDetail(c => c.Id == id);
         }
 
-        public IDataResult<CarDTO> GetCarDetail(Func<CarDTO,bool> filter)
+        public IDataResult<CarDTO> GetCarDetail(Func<CarDTO, bool> filter)
         {
-            return new SuccessDataResult<CarDTO>(Messages.Success,_dal.GetCarDetail(filter)) ;
+            return new SuccessDataResult<CarDTO>(Messages.Success, _dal.GetCarDetail(filter));
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
@@ -138,26 +112,29 @@ namespace Business.Concrete
 
         public IDataResult<List<CarDTO>> GetCarDetailsFilter(CarDetailFilterDto filterDto)
         {
-            try
-            {
-                foreach (PropertyInfo property in filterDto.GetType().GetProperties())
-                {
-                    if ( (int)property.GetValue(filterDto) == 0)
-                    {
-                        property.SetValue(filterDto,null);
-                    }
-                }
 
-            
-                Func<CarDTO, bool> filter = FilterHelper.DynamicFilter<CarDTO, CarDetailFilterDto>(filterDto);
-                return GetCarDetails(filter);
-            }
-            catch (Exception e)
+            foreach (PropertyInfo property in filterDto.GetType().GetProperties())
             {
-                return new ErrorDataResult<List<CarDTO>>(
-                    Messages.Error + e.Message + "inner" + e.InnerException.Message, null);
+                if ((int)property.GetValue(filterDto) == 0)
+                {
+                    property.SetValue(filterDto, null);
+                }
             }
-            
+
+
+            Func<CarDTO, bool> filter = FilterHelper.DynamicFilter<CarDTO, CarDetailFilterDto>(filterDto);
+            return GetCarDetails(filter);
+
+        }
+
+        private IResult CheckRentalsForCars(int carId)
+        {
+            if (_dal.CheckRentalsForCars(carId))
+            {
+                return new ErrorResult();
+            }
+
+            return new SuccessResult();
         }
     }
 }

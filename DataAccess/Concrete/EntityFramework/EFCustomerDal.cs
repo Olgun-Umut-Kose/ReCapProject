@@ -12,12 +12,12 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EFCustomerDal : EFEntityRepoBase<Customer, ReCapContext>, ICustomerDal
     {
-        public bool CheckRentalsForCustomers(Customer customer)
+        public bool CheckRentalsForCustomers(int customerId)
         {
             using (ReCapContext context = new ReCapContext())
             {
                 return context.Rentals.Any(r =>
-                    r.CustomerId == customer.Id && r.ReturnDate == null);
+                    r.CustomerId == customerId && (r.ReturnDate == null || r.ReturnDate > DateTime.UtcNow));
             }
         }
     }

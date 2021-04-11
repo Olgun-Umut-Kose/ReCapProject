@@ -11,6 +11,6 @@ namespace DataAccess.Abstract
     {
         List<CarDTO> GetCarDetails(Func<CarDTO,bool> filter = null);
         CarDTO GetCarDetail(Func<CarDTO,bool> filter = null);
-        bool CheckRentalsForCars(Car entity);
+        bool CheckRentalsForCars(int carId);
     }
 }

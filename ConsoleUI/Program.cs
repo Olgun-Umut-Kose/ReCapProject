@@ -35,7 +35,7 @@ namespace ConsoleUI
                 Id = 0,
                 BrandId = brandManager.Get(b => b.BrandName == "Marka1").Data.Id,
                 ColorId = colorManager.Get(c => c.ColorName == "Siyah").Data.Id,
-                ModelYear = Convert.ToDateTime("03.02.1999"),
+                ModelYear = 1999,
                 DailyPrice = 3700,
                 Description = "Araç birin açıklaması"
             };
@@ -44,7 +44,7 @@ namespace ConsoleUI
             car.Id = 0;
             car.BrandId = brandManager.Get(b => b.BrandName == "Marka2").Data.Id;
             car.ColorId = colorManager.Get(c => c.ColorName == "Kirmizi").Data.Id;
-            car.ModelYear = Convert.ToDateTime("03.02.2000");
+            car.ModelYear = 2000;
             car.DailyPrice = 4900;
             car.Description = "Araç ikinin açıklaması";
 
@@ -53,7 +53,7 @@ namespace ConsoleUI
             car.Id = 0;
             car.BrandId = brandManager.Get(b => b.BrandName == "Marka3").Data.Id;
             car.ColorId = colorManager.Get(c => c.ColorName == "Sari").Data.Id;
-            car.ModelYear = Convert.ToDateTime("03.02.1988");
+            car.ModelYear = 1988;
             car.DailyPrice = 8000;
             car.Description = "Araç üçün açıklaması";
 
@@ -62,7 +62,7 @@ namespace ConsoleUI
             car.Id = 0;
             car.BrandId = brandManager.Get(b => b.BrandName == "Marka4").Data.Id;
             car.ColorId = colorManager.Get(c => c.ColorName == "Beyaz").Data.Id;
-            car.ModelYear = Convert.ToDateTime("03.02.1988");
+            car.ModelYear = 1988;
             car.DailyPrice = 8000;
             car.Description = "";
 
@@ -71,7 +71,7 @@ namespace ConsoleUI
             car.Id = 0;
             car.BrandId = brandManager.Get(b => b.BrandName == "Marka5").Data.Id;
             car.ColorId = colorManager.Get(c => c.ColorName == "Siyah").Data.Id;
-            car.ModelYear = Convert.ToDateTime("03.02.1988");
+            car.ModelYear = 1988;
             car.DailyPrice = 0;
             car.Description = "Araç beşin açıklaması";
 
@@ -119,7 +119,7 @@ namespace ConsoleUI
                 Id = 0,
                 BrandId = brandManager.Get(b => b.BrandName == "Marka1").Data.Id,
                 ColorId = colorManager.Get(c => c.ColorName == "Siyah").Data.Id,
-                ModelYear = Convert.ToDateTime("03.02.1999"),
+                ModelYear = 1999,
                 DailyPrice = 3700,
                 Description = "Araç birin açıklaması"
             };
@@ -128,7 +128,7 @@ namespace ConsoleUI
             car.Id = 0;
             car.BrandId = brandManager.Get(b => b.BrandName == "Marka2").Data.Id;
             car.ColorId = colorManager.Get(c => c.ColorName == "Kirmizi").Data.Id;
-            car.ModelYear = Convert.ToDateTime("03.02.2000");
+            car.ModelYear = 2000;
             car.DailyPrice = 4900;
             car.Description = "Araç ikinin açıklaması";
 
@@ -137,7 +137,7 @@ namespace ConsoleUI
             car.Id = 0;
             car.BrandId = brandManager.Get(b => b.BrandName == "Marka3").Data.Id;
             car.ColorId = colorManager.Get(c => c.ColorName == "Sari").Data.Id;
-            car.ModelYear = Convert.ToDateTime("03.02.1988");
+            car.ModelYear = 1988;
             car.DailyPrice = 8000;
             car.Description = "Araç üçün açıklaması";
 
@@ -154,7 +154,7 @@ namespace ConsoleUI
                               ColorHexCode = clr.HEXCode,
                               DailyPrice = c.DailyPrice,
                               Description = c.Description,
-                              ModelYear = c.ModelYear.Year
+                              ModelYear = c.ModelYear
                           };
 
             foreach (CarDTO carDTO in CarList)

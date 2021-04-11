@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Business.Abstract;
 using Business.Constants;
+using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -22,89 +23,72 @@ namespace Business.Concrete
 
         public IDataResult<List<Rental>> GetAll(Func<Rental, bool> filter = null)
         {
-            try
-            {
-                return new SuccessDataResult<List<Rental>>(Messages.Success, _dal.GetAll(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<List<Rental>>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<List<Rental>>(Messages.Success, _dal.GetAll(filter));
+
         }
 
         public IDataResult<Rental> Get(Func<Rental, bool> filter)
         {
-            try
-            {
-                return new SuccessDataResult<Rental>(Messages.Success, _dal.Get(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<Rental>(Messages.Error + e.Message, null);
-            }
+            return new SuccessDataResult<Rental>(Messages.Success, _dal.Get(filter));
+
         }
 
         public IDataResult<Rental> GetById(int id)
         {
-            try
-            {
-                return new SuccessDataResult<Rental>(Messages.Success, _dal.Get(r => r.Id.Equals(id)));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<Rental>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<Rental>(Messages.Success, _dal.Get(r => r.Id.Equals(id)));
+
         }
 
         public IResult AddOrEdit(Rental entity)
         {
-            try
-            {
-                if (entity.Id == 0)
-                {
-                    bool result = _dal.Any(r => r.CarId == entity.CarId && r.ReturnDate == null);
-                    if (!result)
-                    {
-                        _dal.Add(entity);
-                        return new SuccessResult(Messages.Added);
-                    }
 
-                    return new ErrorResult(Messages.CarError);
-                }
-                else
-                {
-                    _dal.Update(entity);
-                    return new SuccessResult(Messages.Updated);
-                }
-            }
-            catch (Exception e)
+            if (entity.Id == 0)
             {
-                return new ErrorResult(Messages.Error + e.Message);
+                IResult result = BusinessRules.Run(CheckRentals(entity));
+                if (result != null)
+                {
+                    _dal.Add(entity);
+                    return new SuccessResult(Messages.Added);
+                }
+
+                return new ErrorResult(Messages.CarError);
             }
+            else
+            {
+                _dal.Update(entity);
+                return new SuccessResult(Messages.Updated);
+            }
+
         }
 
         public IResult Delete(Rental entity)
         {
-            try
-            {
-                bool result = _dal.Any(r => r.CarId == entity.CarId && r.ReturnDate == null);
-                if (!result)
-                {
-                    _dal.Delete(entity);
-                    return new SuccessResult(Messages.Deleted);
-                }
 
-                return new ErrorResult(message: Messages.CarError);
-            }
-            catch (Exception e)
+            IResult result = BusinessRules.Run(CheckRentals(entity));
+            if (result != null)
             {
-                return new ErrorResult(Messages.Error + e.Message);
+                _dal.Delete(entity);
+                return new SuccessResult(Messages.Deleted);
             }
+
+            return new ErrorResult(message: Messages.CarError);
+
         }
 
         public IDataResult<List<RentalDTO>> GetRentalDetails()
         {
             return new SuccessDataResult<List<RentalDTO>>(Messages.Success, _dal.GetRentalDetails());
+        }
+
+        private IResult CheckRentals(Rental rental)
+        {
+            if(!_dal.Any(r => r.CarId == rental.CarId && (r.ReturnDate == null || r.ReturnDate > DateTime.UtcNow)))
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult();
         }
     }
 }

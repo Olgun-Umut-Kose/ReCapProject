@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Business.Abstract;
 using Business.Concrete;
 using Core.DependencyResolvers;
-using Core.Utilities.Extensions;
+using Core.Extensions;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
@@ -81,6 +81,8 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseCors(builder => builder.AllowAnyOrigin());
 

@@ -26,28 +26,16 @@ namespace Business.Concrete
 
         public IDataResult<List<CarImage>> GetAll(Func<CarImage, bool> filter = null)
         {
-            try
-            {
-                return new SuccessDataResult<List<CarImage>>(Messages.Success, _dal.GetAll(filter));
-                
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<List<CarImage>>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<List<CarImage>>(Messages.Success, _dal.GetAll(filter));
+
         }
 
         public IDataResult<CarImage> Get(Func<CarImage, bool> filter)
         {
-            try
-            {
-                return new SuccessDataResult<CarImage>(Messages.Success, _dal.Get(filter));
-                
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<CarImage>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<CarImage>(Messages.Success, _dal.Get(filter));
+
         }
 
         public IDataResult<CarImage> GetById(int id)
@@ -57,74 +45,59 @@ namespace Business.Concrete
 
         public IResult Delete(CarImage entity)
         {
-            try
-            {
-                string path = Get(ci => ci.Id == entity.Id).Data.ImagePath;
-                FileHelper.Delete(path);
-                _dal.Delete(entity);
-                return new SuccessResult(Messages.Deleted);
-            }
-            catch (Exception e)
-            {
-                return new ErrorResult(Messages.Error + e.Message);
-            }
+
+            string path = Get(ci => ci.Id == entity.Id).Data.ImagePath;
+            FileHelper.Delete(path);
+            _dal.Delete(entity);
+            return new SuccessResult(Messages.Deleted);
+
         }
 
         public IResult AddOrEdit(IFormFile file, CarImage entity, string type)
         {
-            try
+
+            IResult result = BusinessRules.Run(CheckCarImageLimit(entity));
+            if (result != null) return result;
+
+            if (entity.Id == 0)
             {
-                IResult result = BusinessRules.Run(CheckCarImageLimit(entity));
-                if (result != null) return result;
+                string path = FileHelper.Save(file, type).Data;
 
-                if (entity.Id == 0)
-                {
-                    string path = FileHelper.Save(file, type).Data;
+                entity.ImagePath = path;
+                _dal.Add(entity);
+                return new SuccessResult(Messages.Added);
 
-                    entity.ImagePath = path;
-                    _dal.Add(entity);
-                    return new SuccessResult(Messages.Added);
-
-                }
-                else
-                {
-                    string path = Get(ci => ci.Id == entity.Id).Data.ImagePath;
-                    FileHelper.Delete(path);
-                    string updatedPath = FileHelper.Save(file, type).Data;
-                    entity.ImagePath = updatedPath;
-                    _dal.Update(entity);
-                    return new SuccessResult(Messages.Updated);
-                }
             }
-            catch (Exception e)
+            else
             {
-                return new ErrorResult(Messages.Error + e.Message+"--"+ e.InnerException?.Message);
+                string path = Get(ci => ci.Id == entity.Id).Data.ImagePath;
+                FileHelper.Delete(path);
+                string updatedPath = FileHelper.Save(file, type).Data;
+                entity.ImagePath = updatedPath;
+                _dal.Update(entity);
+                return new SuccessResult(Messages.Updated);
             }
+
         }
 
         public IDataResult<List<string>> GetImagesByCarId(int carId)
         {
-            try
-            {
-                IResult result = BusinessRules.Run(CheckCarImage(carId));
-                if (result != null)
-                {
-                    return new SuccessDataResult<List<string>>(Messages.Success,
-                        new List<string>{Path.Combine(Environment.CurrentDirectory, @"wwwroot\Image\default.png").ToString()});
-                }
 
-                List<string> Images = new List<string>();
-
-                _dal.GetAll(ci => ci.CarId == carId).ForEach(x =>
-                {
-                    Images.Add(x.ImagePath);
-                });
-                return new SuccessDataResult<List<string>>(Messages.Success, Images);
-            }
-            catch (Exception e)
+            IResult result = BusinessRules.Run(CheckCarImage(carId));
+            if (result != null)
             {
-                return new ErrorDataResult<List<string>>(Messages.Error + e.Message, null);
+                return new SuccessDataResult<List<string>>(Messages.Success,
+                    new List<string> { Path.Combine(Environment.CurrentDirectory, @"wwwroot\Image\default.png").ToString() });
             }
+
+            List<string> Images = new List<string>();
+
+            _dal.GetAll(ci => ci.CarId == carId).ForEach(x =>
+            {
+                Images.Add(x.ImagePath);
+            });
+            return new SuccessDataResult<List<string>>(Messages.Success, Images);
+
         }
 
         private IResult CheckCarImage(int carId)

@@ -1,7 +1,7 @@
 ﻿using System;
 using Business.Constants;
 using Castle.DynamicProxy;
-using Core.Utilities.Extensions;
+using Core.Extensions;
 using Core.Utilities.Interception.AutoFac;
 using Core.Utilities.IoC;
 using Core.Utilities.Results.Concrete;

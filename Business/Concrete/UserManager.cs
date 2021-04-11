@@ -22,45 +22,29 @@ namespace Business.Concrete
 
         public IDataResult<List<OperationClaim>> GetClaims(User user)
         {
-            try
-            {
-                List<OperationClaim> result = _dal.GetClaims(user);
-                return new SuccessDataResult<List<OperationClaim>>(Messages.Success, result);
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<List<OperationClaim>>(Messages.Error + e.Message, null);
-                
-            }
-            
-            
+
+            List<OperationClaim> result = _dal.GetClaims(user);
+            return new SuccessDataResult<List<OperationClaim>>(Messages.Success, result);
+
+
+
         }
 
         public IResult Add(User user)
         {
-            try
-            {
-                _dal.Add(user);
-                return new SuccessResult(Messages.Success);
-            }
-            catch (Exception e)
-            {
-                return new ErrorResult(Messages.Error + e.Message);
-            }
+
+            _dal.Add(user);
+            return new SuccessResult(Messages.Success);
+
         }
 
         public IDataResult<User> GetByMail(string email)
         {
-            try
-            {
-                User result = _dal.Get(u => u.Email == email);
-                return new SuccessDataResult<User>(Messages.Success, result);
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<User>(Messages.Error + e.Message, null);
-            }
-            
+
+            User result = _dal.Get(u => u.Email == email);
+            return new SuccessDataResult<User>(Messages.Success, result);
+
+
         }
     }
 }

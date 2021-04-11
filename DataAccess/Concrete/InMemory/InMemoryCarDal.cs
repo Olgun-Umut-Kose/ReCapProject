@@ -34,7 +34,7 @@ namespace DataAccess.Concrete.InMemory
             throw new NotImplementedException();
         }
 
-        public bool CheckRentalsForCars(Car entity)
+        public bool CheckRentalsForCars(int anan)
         {
             throw new NotImplementedException();
         }

@@ -30,7 +30,7 @@ namespace DataAccess.Concrete.EntityFramework
                         ColorHexCode = clr.HEXCode,
                         DailyPrice = c.DailyPrice,
                         Description = c.Description,
-                        ModelYear = c.ModelYear.Year
+                        ModelYear = c.ModelYear
                     };
                 return filter == null
                     ? CarList.ToList()
@@ -55,18 +55,19 @@ namespace DataAccess.Concrete.EntityFramework
                         ColorHexCode = clr.HEXCode,
                         DailyPrice = c.DailyPrice,
                         Description = c.Description,
-                        ModelYear = c.ModelYear.Year
+                        ModelName = c.ModelName,
+                        ModelYear = c.ModelYear
                     };
                 return Car.FirstOrDefault(filter);
             } 
         }
 
-        public bool CheckRentalsForCars(Car entity)
+        public bool CheckRentalsForCars(int carId)
         {
             using (ReCapContext context = new ReCapContext())
             {
-                return (context.Rentals.Any(r =>
-                    r.CarId == entity.Id && r.ReturnDate == null));
+                return context.Rentals.Any(r =>
+                    r.CarId == carId && (r.ReturnDate == null || r.ReturnDate > DateTime.UtcNow));
             }
         }
     }

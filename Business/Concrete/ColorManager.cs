@@ -20,72 +20,46 @@ namespace Business.Concrete
 
         public IDataResult<Color> GetById(int id)
         {
-            try
-            {
-                return new SuccessDataResult<Color>(Messages.Success, _dal.Get(c => c.Id.Equals(id)));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<Color>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<Color>(Messages.Success, _dal.Get(c => c.Id.Equals(id)));
+
         }
 
         public IResult AddOrEdit(Color entity)
         {
-            try
+
+            if (entity.Id == 0)
             {
-                if (entity.Id == 0)
-                {
-                    _dal.Add(entity);
-                    return new SuccessResult(Messages.Added);
-                }
-                else
-                {
-                    _dal.Update(entity);
-                    return new SuccessResult(Messages.Updated);
-                }
+                _dal.Add(entity);
+                return new SuccessResult(Messages.Added);
             }
-            catch (Exception e)
+            else
             {
-                return new ErrorResult(Messages.Error + e.Message);
+                _dal.Update(entity);
+                return new SuccessResult(Messages.Updated);
             }
+
         }
 
         public IResult Delete(Color entity)
         {
-            try
-            {
-                _dal.Delete(entity);
-                return new SuccessResult(Messages.Deleted);
-            }
-            catch (Exception e)
-            {
-                return new ErrorResult(Messages.Error + e.Message);
-            }
+
+            _dal.Delete(entity);
+            return new SuccessResult(Messages.Deleted);
+
         }
 
-        public IDataResult<List<Color>> GetAll(Func<Color,bool> filter = null)
+        public IDataResult<List<Color>> GetAll(Func<Color, bool> filter = null)
         {
-            try
-            {
-                return new SuccessDataResult<List<Color>>(Messages.Success, _dal.GetAll(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<List<Color>>(Messages.Error + e.Message, null);
-            }
+            return new SuccessDataResult<List<Color>>(Messages.Success, _dal.GetAll(filter));
+
         }
 
-        public IDataResult<Color> Get(Func<Color,bool> filter)
+        public IDataResult<Color> Get(Func<Color, bool> filter)
         {
-            try
-            {
-                return new SuccessDataResult<Color>(Messages.Success, _dal.Get(filter));
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<Color>(Messages.Error + e.Message, null);
-            }
+
+            return new SuccessDataResult<Color>(Messages.Success, _dal.Get(filter));
+
         }
 
 
