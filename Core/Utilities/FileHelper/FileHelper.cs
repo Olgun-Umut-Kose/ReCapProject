@@ -10,8 +10,7 @@ namespace Core.Utilities.FileHelper
     {
         public static IDataResult<string> Save(IFormFile file, string type)
         {
-            try
-            {
+            
                 if (file.Length > 0)
                 {
                     var creatorResult = PathCreator(file, type);
@@ -30,25 +29,18 @@ namespace Core.Utilities.FileHelper
                 }
 
                 return new ErrorDataResult<string>(null);
-            }
-            catch (Exception e)
-            {
-                return new ErrorDataResult<string>(e.Message, null);
-            }
+            
+            
             
         }
 
         public static IResult Delete(string path)
         {
-            try
-            {
-                File.Delete(path);
+            
+            File.Delete(path);
                 return new SuccessResult("Başarılı");
-            }
-            catch (Exception e)
-            {
-                return new ErrorResult(e.Message);
-            }
+            
+            
             
         }
 
